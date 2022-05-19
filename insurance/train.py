@@ -8,7 +8,6 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import ElasticNet
 from urllib.parse import urlparse
-import mlflow
 import mlflow.sklearn
 from sklearn.preprocessing import LabelEncoder
 
@@ -35,14 +34,18 @@ if __name__ == "__main__":
         logger.exception(
             "Unable to download training & test CSV, check your internet connection. Error: %s", e
         )
-
     print(data)
-    data.drop('region', inplace=True, axis=1)
+    # data.drop('region', inplace=True, axis=1)
     encoder = LabelEncoder()
     data.loc[:, "sex"] = encoder.fit_transform(data.loc[:, "sex"])
     # male = 1, female = 0
     data.loc[:, "smoker"] = encoder.fit_transform(data.loc[:, "smoker"])
     # yes = 1, no = 0
+    data.loc[:, "region"] = encoder.fit_transform(data.loc[:, "region"])
+    # NE = 0, NW =1, SE = 2, SW = 3
+
+    data.to_csv('data/data_all.csv',index=False)
+
 
     print(data)
 
@@ -50,6 +53,10 @@ if __name__ == "__main__":
     train, rest = train_test_split(data,train_size=0.45, test_size=0.55)
     test, rest2 = train_test_split(rest,train_size=0.65, test_size=0.35)
     validation, production = train_test_split(rest2,train_size=0.55, test_size=0.45)
+    train.to_csv('data/data_train.csv', index=False)
+    test.to_csv('data/data_test.csv', index=False)
+    validation.to_csv('data/data_validation.csv', index=False)
+    production.to_csv('data/data_production.csv', index=False)
 
     # The predicted column is "quality" which is a scalar from [3, 9]
     train_x = train.drop(["charges"], axis=1)

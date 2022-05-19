@@ -1,4 +1,6 @@
 # created by virtualenv automatically
 venv/Lib
-.idea/
+.idea
 mlruns/
+*.pkl
+*.log
