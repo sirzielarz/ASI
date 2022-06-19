@@ -4,3 +4,4 @@ venv/Lib
 mlruns/
 *.pkl
 *.log
+__pycache__
